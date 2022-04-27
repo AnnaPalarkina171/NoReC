@@ -22,17 +22,11 @@ PRE_TRAINED_MODEL_NAME = 'allenai/longformer-base-4096'
 MAX_LEN = 4096   # longest text = 9111
 RANDOM_SEED = 42
 BATCH_SIZE = 4
-EPOCHS = 15
+EPOCHS = 10
 
 df = pd.read_csv('combined_data.csv')
 class_names = df.label.unique()
-print(device)
-print(class_names)
-print(len(df))
-
-print('Initializing tokenizer - LongFormer')
 tokenizer = LongformerTokenizer.from_pretrained(PRE_TRAINED_MODEL_NAME)
-
 
 class Dataset(Dataset):
   def __init__(self, texts, targets, tokenizer, max_len):
@@ -63,12 +57,6 @@ class Dataset(Dataset):
       'targets': torch.tensor(target, dtype=torch.long)
     }
 
-df_train, df_val = train_test_split(
-  df,
-  test_size=0.1,
-  random_state=RANDOM_SEED
-)
-
 
 def create_data_loader(df, tokenizer, max_len, batch_size):
   ds = Dataset(
@@ -82,34 +70,35 @@ def create_data_loader(df, tokenizer, max_len, batch_size):
     batch_size=batch_size
   )
 
+class SentimentClassifier(nn.Module):
 
-print('Creating train and validation dataloaders')
+  def __init__(self, n_classes):
+    super(SentimentClassifier, self).__init__()
+    self.long_f = LongformerModel.from_pretrained(PRE_TRAINED_MODEL_NAME)
+    self.drop = nn.Dropout(p=0.3)
+    self.out = nn.Linear(self.long_f.config.hidden_size, n_classes)
+
+  def forward(self, input_ids, attention_mask):
+    
+    long_f_output = self.long_f(
+      input_ids=input_ids,
+      attention_mask=attention_mask,
+      return_dict=False
+    )
+    last_hidden_state, pooled_output = long_f_output
+    output = self.drop(pooled_output)
+    return self.out(output)
+
+df_train, df_val = train_test_split(
+  df,
+  test_size=0.1,
+  random_state=RANDOM_SEED
+)
 train_data_loader = create_data_loader(df_train, tokenizer, MAX_LEN, BATCH_SIZE)
 val_data_loader = create_data_loader(df_val, tokenizer, MAX_LEN, BATCH_SIZE)
 
 data = next(iter(train_data_loader))
 
-class SentimentClassifier(nn.Module):
-
-  def __init__(self, n_classes):
-    super(SentimentClassifier, self).__init__()
-    self.bert = LongformerModel.from_pretrained(PRE_TRAINED_MODEL_NAME)
-    self.drop = nn.Dropout(p=0.3)
-    self.out = nn.Linear(self.bert.config.hidden_size, n_classes)
-
-  def forward(self, input_ids, attention_mask):
-    
-    bert_output = self.bert(
-      input_ids=input_ids,
-      attention_mask=attention_mask,
-      return_dict=False
-    )
-    last_hidden_state, pooled_output = bert_output
-    output = self.drop(pooled_output)
-    return self.out(output)
-
-
-print('Initializing custon class')
 model = SentimentClassifier(len(class_names))
 model = model.to(device)
 
@@ -173,8 +162,7 @@ def eval_model(model, data_loader, loss_fn, device, n_examples):
       correct_predictions += torch.sum(preds == targets)
       losses.append(loss.item())
   return correct_predictions.double() / n_examples, np.mean(losses)
-
-
+  
 history = defaultdict(list)
 best_accuracy = 0
 for epoch in range(EPOCHS):
