@@ -31,7 +31,7 @@ DROPOUT = float(args.dropout)
 WARMUP = int(args.warmup)
 
 
-print('THIS IS SIMPLE NORBERT MODEL using augmented_splited_0.csv ')
+print('THIS IS SIMPLE NORBERT MODEL using combined_data.csv')
 print(f'LR = {LR}, dropout= {DROPOUT}, num_warmup_steps= {WARMUP}')
 
 def seed_everything(seed_value=42):
@@ -52,7 +52,7 @@ BATCH_SIZE = 4
 EPOCHS = 20
 
 
-df = pd.read_csv('augmented_splited_0_5.csv')
+df = pd.read_csv('combined_data.csv')
 
 class_names = df.label.unique()
 tokenizer = BertTokenizer.from_pretrained(PRE_TRAINED_MODEL_NAME)
