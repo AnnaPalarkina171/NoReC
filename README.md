@@ -17,5 +17,5 @@ Therefore, we tried to train with one augmented class at a time (using same stra
 - [slurm results](https://github.com/AnnaPalarkina171/NoReC/blob/main/results/slurm-6932819.out) for model trained on data + augmented class 1
 - [slurm results](https://github.com/AnnaPalarkina171/NoReC/blob/main/results/slurm-6932821.out) for model trained on data + augmented class 5
 
-As you can see there is barely any difference on test score, eve for augmented classes. The most interesting thing here is that when we train on data + 3 augmented classes (0, 1 and 5) the model does not learn anything, [slurm file here](https://github.com/AnnaPalarkina171/NoReC/blob/main/train_aug_015.py).
+As you can see there is barely any difference on test score, even for augmented classes. The most interesting thing here is that when we train on data + 3 augmented classes (0, 1 and 5) the model does not learn anything, [slurm file here](https://github.com/AnnaPalarkina171/NoReC/blob/main/train_aug_015.py).
 <br>
