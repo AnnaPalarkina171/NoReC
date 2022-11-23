@@ -21,3 +21,4 @@ Therefore, we tried to train with one augmented class at a time (using same stra
 As you can see there is barely any difference on test score, even for augmented classes. The most interesting thing here is that when we train on data + 3 augmented classes (0, 1 and 5) the model does not learn anything, [slurm file here](https://github.com/AnnaPalarkina171/NoReC/blob/main/train_aug_015.py).
 <br>
 May I ask you to take a look at augmentation and train script to check if there mistakes were made because I don't understand why model does not learn anything with augmented data.
+I also ried to freeze bert and add batchnorm + linear layers for data woth all 3 augmented classes but same results.
