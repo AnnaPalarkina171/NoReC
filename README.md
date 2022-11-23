@@ -7,9 +7,10 @@ train_grid.py - this is straightforward NorBert2 model finetuning on NoReC - [re
 augmentation.py - script for creating augmented texts. The idea is to mask one word in the text and unmask it using roberta (also tried norbert, no difference). To choose the augmented word we:
 - check if the new word is not the same as masked
 - check if the new word have same sentiment polarity as masked word. For this two lists of [negative](https://github.com/AnnaPalarkina171/NoReC/blob/main/Fullform_Negative_lexicon.txt) and [positive](https://github.com/AnnaPalarkina171/NoReC/blob/main/Fullform_Positive_lexicon.txt) norwegian words were used. 
-- check if the confidence of the model is at least 0.5.
-<br> 
+- check if the confidence of the model is at least 0.5. <br> 
+- 
 After texts with augmented words were ready, we splited big texts to create more samples.
+[Here](https://github.com/AnnaPalarkina171/NoReC/blob/main/augmented_examples.csv) you can see examples of augmentation.
 <br> 
 
 Therefore, we tried to train with one augmented class at a time (using same straighforward model):
@@ -19,3 +20,4 @@ Therefore, we tried to train with one augmented class at a time (using same stra
 
 As you can see there is barely any difference on test score, even for augmented classes. The most interesting thing here is that when we train on data + 3 augmented classes (0, 1 and 5) the model does not learn anything, [slurm file here](https://github.com/AnnaPalarkina171/NoReC/blob/main/train_aug_015.py).
 <br>
+May I ask you to take a look at augmentation and train script to check if there mistakes were made because I don't understand why model does not learn anything with augmented data.
