@@ -8,7 +8,6 @@ augmentation.py - script for creating augmented texts. The idea is to mask one w
 - check if the new word is not the same as masked
 - check if the new word have same sentiment polarity as masked word. For this two lists of [negative](https://github.com/AnnaPalarkina171/NoReC/blob/main/Fullform_Negative_lexicon.txt) and [positive](https://github.com/AnnaPalarkina171/NoReC/blob/main/Fullform_Positive_lexicon.txt) norwegian words were used. 
 - check if the confidence of the model is at least 0.5. <br> 
-- 
 After texts with augmented words were ready, we splited big texts to create more samples.
 [Here](https://github.com/AnnaPalarkina171/NoReC/blob/main/augmented_examples.csv) you can see examples of augmentation.
 <br> 
